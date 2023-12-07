@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, REST, Routes } from "discord.js";
+import { Client, ClientUser, GatewayIntentBits, REST, Routes } from "discord.js";
 import { config } from "dotenv";
 
 config();
@@ -16,11 +16,29 @@ client.once("ready", () => {
   console.log(`${client.user.username} has been started!`);
 });
 
+// Verifying command interaction
+client.on("interactionCreate", (interaction) => {
+  if(interaction.isChatInputCommand()){
+    interaction.reply(
+      {
+        content: `${interaction.user} say: ${interaction.options.get("message").value}`
+      })
+  }
+})
+
 async function main() {
   const commands = [
     {
       name: "hello",
       description: "Say hello to you",
+      options: [
+        {
+          name: "message",
+          description: "say anything you want...",
+          type: 3,
+          required: true,
+        }
+      ]
     },
   ];
 
